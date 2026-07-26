@@ -1,18 +1,19 @@
-{
-  "compilerOptions": {
-    "target": "ES2020",
-      "useDefineForClassFields": true,
-        "lib": ["ES2020", "DOM", "DOM.Iterable"],
-          "module": "ESNext",
-            "moduleResolution": "bundler",
-              "jsx": "react-jsx",
-                "strict": true,
-                  "skipLibCheck": true,
-                    "noEmit": true,
-                      "resolveJsonModule": true,
-                        "allowImportingTsExtensions": true,
-                          "isolatedModules": true,
-                            "types": ["vite/client"]
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 5173,
+    proxy: {
+      "/api": {
+        target: "http://localhost:5000",
+        changeOrigin: true,
+      },
+      "/uploads": {
+        target: "http://localhost:5000",
+        changeOrigin: true,
+      },
+    },
   },
-  "include": ["src/**/*"]
-}
+});
