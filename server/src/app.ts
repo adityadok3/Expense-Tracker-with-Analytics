@@ -1,3 +1,4 @@
+import { prisma } from "./config/prisma";
 import express, { Express } from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -27,6 +28,15 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Health Check
 app.get("/health", (_req, res) => {
   res.json({ status: "OK", timestamp: new Date().toISOString() });
+});
+
+app.get("/debug/categories", async (_req, res) => {
+  const categories = await prisma.category.findMany();
+
+  res.json({
+    count: categories.length,
+    categories,
+  });
 });
 
 // API Routes
