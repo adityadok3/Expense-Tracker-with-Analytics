@@ -9,6 +9,17 @@ import { env } from "./config/env";
 import { swaggerSpec } from "./config/swagger";
 import routes from "./routes";
 import { errorHandler } from "./middleware/errorHandler";
+import { exec } from "child_process";
+
+app.get("/seed", (_req, res) => {
+  exec("npm run prisma:seed", (err, stdout, stderr) => {
+    if (err) {
+      return res.status(500).json({ error: stderr });
+    }
+
+    res.json({ output: stdout });
+  });
+});
 
 const app: Express = express();
 
