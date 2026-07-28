@@ -1,4 +1,3 @@
-import { prisma } from "./config/prisma";
 import express, { Express } from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -9,19 +8,8 @@ import { env } from "./config/env";
 import { swaggerSpec } from "./config/swagger";
 import routes from "./routes";
 import { errorHandler } from "./middleware/errorHandler";
-import { exec } from "child_process";
 
 const app: Express = express();
-
-app.get("/seed", (_req, res) => {
-  exec("npm run prisma:seed", (err, stdout, stderr) => {
-    if (err) {
-      return res.status(500).json({ error: stderr });
-    }
-
-    res.json({ output: stdout });
-  });
-});
 
 // Security & Middlewares
 app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
@@ -39,15 +27,6 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Health Check
 app.get("/health", (_req, res) => {
   res.json({ status: "OK", timestamp: new Date().toISOString() });
-});
-
-app.get("/debug/categories", async (_req, res) => {
-  const categories = await prisma.category.findMany();
-
-  res.json({
-    count: categories.length,
-    categories,
-  });
 });
 
 // API Routes
