@@ -11,6 +11,8 @@ import routes from "./routes";
 import { errorHandler } from "./middleware/errorHandler";
 import { exec } from "child_process";
 
+const app: Express = express();
+
 app.get("/seed", (_req, res) => {
   exec("npm run prisma:seed", (err, stdout, stderr) => {
     if (err) {
@@ -20,8 +22,6 @@ app.get("/seed", (_req, res) => {
     res.json({ output: stdout });
   });
 });
-
-const app: Express = express();
 
 // Security & Middlewares
 app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
