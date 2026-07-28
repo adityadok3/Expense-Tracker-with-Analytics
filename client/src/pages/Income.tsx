@@ -41,9 +41,13 @@ export const IncomePage: React.FC = () => {
   const fetchCategories = async () => {
     try {
       const res = await categoryService.getCategories();
+
+      console.log("FULL RESPONSE:", res);
+      console.log("res.data:", res.data);
+
       setCategories(res.data);
     } catch (err) {
-      console.error(err);
+      console.error("CATEGORY ERROR:", err);
     }
   };
 
